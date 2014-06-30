@@ -68,7 +68,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\stb_image.cpp" />
     <ClCompile Include="SendMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\data\pixelShader.glsl" />
+    <None Include="..\data\pixelShader2.glsl" />
+    <None Include="..\data\vertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

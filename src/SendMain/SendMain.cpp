@@ -39,6 +39,91 @@ void pointAtAngle(float vec[], int i, float r, int u)
 	vec[3 * i + 2] = z;
 }
 
+void translateSquare(float* pos, float dx, float dy)
+{
+	pos[0] += dx; pos[1] += dy;
+	pos[3] += dx; pos[4] += dy;
+	pos[6] += dx; pos[7] += dy;
+	pos[9] += dx; pos[10] += dy;
+	pos[12] += dx; pos[13] += dy;
+	pos[15] += dx; pos[16] += dy;
+}
+
+void moveSquare(float* pos)
+{
+	//centrul patratului
+	float xc = (pos[0] + pos[3] + pos[6] + pos[9]) / 4.0f;
+	float yc = (pos[1] + pos[4] + pos[7] + pos[10]) / 4.0f;
+	
+	//centrul de rotatie si raza
+	float x = 0.0f;
+	float y = 0.0f;
+	float radius = 0.5f;
+
+	static int cadran = 1;
+	float step = 0.01f;
+
+	switch (cadran)
+	{
+	case 1:
+		if ( radius <= xc + step)
+			cadran = 4;
+		break;
+	case 4:
+		if (xc < 0)
+			cadran = 3;
+		break;
+	case 3:
+		if (radius <= abs(xc) + abs(step))
+			cadran = 2;
+		break;
+	case 2:
+		if (xc > 0)
+			cadran = 1;
+		break;
+	default:
+		break;
+	}
+
+	if (cadran > 2)
+		step = -step;
+
+	//noile coordonate relative la centru
+	float xn = xc - x + step;
+	float yn = sqrt(pow(radius, 2) - pow(xn, 2));
+
+	if (cadran > 2)
+		yn = -yn;
+
+	//deplasamente
+	float dx = xn - xc;
+	float dy = yn - yc;
+
+	translateSquare(pos, -xc, -yc);
+	translateSquare(pos, dx, dy);
+	translateSquare(pos, xc, yc);
+}
+
+void moveCircle(float* pos, int n, int d)
+{
+	float speed = 0.01;
+	float dx, dy;
+	if (d >= 2)
+	{
+		dx = d == 3 ? speed : -speed;
+		dy = 0;
+	}
+	else
+	{
+		dx = 0;
+		dy = d == 0 ? speed : -speed;
+	}
+	for (int i = 0; i < n; i++)
+	{
+		pos[3 * i] += dx;
+		pos[3 * i + 1] += dy;
+	}
+}
 
 int main() {
 	// Initializare (se creeaza contextul)
@@ -193,6 +278,27 @@ int main() {
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
+
+		moveSquare(vertex_buffer_square);
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+			glfwSetWindowShouldClose(window, 1);
+		}
+
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
+			moveCircle(vertex_buffer_circle, i, 0);
+		}
+
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
+			moveCircle(vertex_buffer_circle, i, 1);
+		}
+
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
+			moveCircle(vertex_buffer_circle, i, 2);
+		}
+
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
+			moveCircle(vertex_buffer_circle, i, 3);
+		}
 	}
 
 	glfwTerminate();

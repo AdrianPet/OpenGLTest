@@ -1,8 +1,44 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
+#include <glm/glm.hpp>
 #include <stdio.h>
 #include <math.h>
-#define PI 3.14159265359
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#ifdef _DEBUG
+	#ifndef DBG_NEW
+		#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+		#define new DBG_NEW
+	#endif
+#endif  // _DEBUG
+#include<vector>
+#include<stb_image.h>
+
+int x, y, numar;
+int force_channels = 4;
+
+void FlipTexture(unsigned char* image_data, int x, int y, int n)
+{
+	//flip texture
+	int width_in_bytes = x * 4;
+	unsigned char *top = NULL;
+	unsigned char *bottom = NULL;
+	unsigned char temp = 0;
+	int half_height = y / 2;
+
+	for (int row = 0; row < half_height; row++) {
+		top = image_data + row * width_in_bytes;
+		bottom = image_data + (y - row - 1) * width_in_bytes;
+		for (int col = 0; col < width_in_bytes; col++) {
+			temp = *top;
+			*top = *bottom;
+			*bottom = temp;
+			top++;
+			bottom++;
+		}
+	}
+}
 
 // functie banala de incarcat continutul unui fisier intr-un buffer
 char * LoadFileInMemory(const char *filename)
@@ -45,8 +81,6 @@ void translateSquare(float* pos, float dx, float dy)
 	pos[3] += dx; pos[4] += dy;
 	pos[6] += dx; pos[7] += dy;
 	pos[9] += dx; pos[10] += dy;
-	pos[12] += dx; pos[13] += dy;
-	pos[15] += dx; pos[16] += dy;
 }
 
 void moveSquare(float* pos)
@@ -177,6 +211,21 @@ int main() {
 
 	delete[] vertex_shader;
 	delete[] fragment_shader;
+	delete[] fragment_shader2;
+
+
+	std::vector<unsigned int> indices(6);
+	indices.push_back(0);
+	indices.push_back(1);	
+	indices.push_back(2);
+	indices.push_back(3);	
+	indices.push_back(0);
+	indices.push_back(2);
+
+	GLuint elementbuffer;
+	glGenBuffers(1, &elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 	// buffer cu vertecsi in RAM 
 	float vertex_buffer_triangle[] = {
@@ -195,9 +244,7 @@ int main() {
 		0.1f, 0.6f, 0.0f,
 		0.1f, 0.4f, 0.0f,
 		-0.1f, 0.4f, 0.0f,
-		-0.1f, 0.6f, 0.0f,
-		0.1f, 0.6f, 0.0f,
-		-0.1f, 0.4f, 0.0f
+		-0.1f, 0.6f, 0.0f
 	};
 
 	float radius = 0.2f;
@@ -245,6 +292,31 @@ int main() {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
+
+	unsigned char* image_data = stbi_load("tex.jpg", &x, &y, &numar, force_channels);
+	FlipTexture(image_data, x, y, number);
+	// Trimitem textura la memoria video
+	unsigned int tex = 0;
+	glGenTextures(1, &tex);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexImage2D(
+		GL_TEXTURE_2D,
+		0,
+		GL_RGBA,
+		x,
+		y,
+		0,
+		GL_RGBA,
+		GL_UNSIGNED_BYTE,
+		image_data
+		);
+	// setam parametri de sampling
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); //ce se intampla cand coordonata nu se inscrie in limite
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // setam samplare cu interpolare liniara
+
 	while (!glfwWindowShouldClose(window)) {
 		//..... Randare................. 
 		// stergem ce s-a desenat anterior
@@ -261,8 +333,18 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		//patrat
-		glBufferData(GL_ARRAY_BUFFER, 18 * sizeof (float), vertex_buffer_square, GL_STATIC_DRAW);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		int tex_loc = glGetUniformLocation(shader_programme, "basic_texture");
+		glUseProgram(shader_programme);
+		glUniform1i(tex_loc, 0); // use active texture 0
+
+		glBufferData(GL_ARRAY_BUFFER, 12 * sizeof (float), vertex_buffer_square, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		glDrawElements(
+			GL_TRIANGLES,      // mode
+			indices.size(),    // count
+			GL_UNSIGNED_INT,   // type
+			(void*)0           // element array buffer offset
+			);
 
 		//cerc
 		glBufferData(GL_ARRAY_BUFFER, 3 * i * sizeof (float), vertex_buffer_circle, GL_STATIC_DRAW);
@@ -301,6 +383,8 @@ int main() {
 		}
 	}
 
+	_CrtDumpMemoryLeaks();
 	glfwTerminate();
+
 	return 0;
 }

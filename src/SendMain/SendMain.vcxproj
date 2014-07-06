@@ -69,12 +69,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\stb_image.cpp" />
+    <ClCompile Include="Display.cpp" />
     <ClCompile Include="SendMain.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\pixelShader.glsl" />
-    <None Include="..\data\pixelShader2.glsl" />
-    <None Include="..\data\vertexShader.glsl" />
+    <None Include="..\data\Shader.fs.glsl" />
+    <None Include="..\data\Shader.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Display.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

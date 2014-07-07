@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include "Texture.h"
 
 struct Vertex
 {
@@ -31,7 +32,7 @@ enum SpriteBufferPositions
 class Sprite
 {
 public:
-	Sprite(Vertex* vertices, unsigned int numVertices);
+	Sprite(Vertex* vertices, unsigned int numVertices, std::string texturePath);
 
 	void Draw();
 
@@ -43,5 +44,6 @@ private:
 	GLuint m_vertexArrayObject;
 	GLuint m_vertexArrayBuffers[NUM_BUFFERS];
 	unsigned int m_numIndices;
+	Texture* m_texture;
 };
 

@@ -7,8 +7,10 @@
 #include <stdlib.h>
 
 
-Sprite::Sprite(Vertex* vertices, unsigned int numVertices)
+Sprite::Sprite(Vertex* vertices, unsigned int numVertices, std::string texturePath)
 {
+	m_texture = new Texture(texturePath);
+
 	static const unsigned int indices[] = {0, 1, 2, 0, 2, 3};
 	m_numIndices = sizeof(indices) / sizeof(indices[0]);
 
@@ -48,10 +50,13 @@ Sprite::~Sprite()
 {
 	glDeleteBuffers(NUM_BUFFERS, m_vertexArrayBuffers);
 	glDeleteVertexArrays(1, &m_vertexArrayObject);
+	delete m_texture;
 }
 
 void Sprite::Draw()
 {
+	m_texture->Bind();
+
 	glBindVertexArray(m_vertexArrayObject);
 
 	glDrawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_INT, 0);

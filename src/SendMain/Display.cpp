@@ -5,7 +5,7 @@ Display::Display(int width, int height, const std::string& title)
 {
 	// Initializare (se creeaza contextul)
 	if (!glfwInit()) {
-		fprintf(stderr, "ERROR: could not start GLFW3\n");
+		std::cout << "ERROR: could not start GLFW3" << std::endl;
 		return;
 	}
 
@@ -13,7 +13,7 @@ Display::Display(int width, int height, const std::string& title)
 	m_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 	if (!m_window) {
 		// nu am reusit sa facem fereastra, oprim totul si dam mesaj de eroare
-		printf("ERROR: could not open window with GLFW3\n");
+		std::cout << "ERROR: could not open window with GLFW3" << std::endl;
 		glfwTerminate();
 		return;
 	}
@@ -30,16 +30,27 @@ Display::Display(int width, int height, const std::string& title)
 	printf("OpenGL version supported %s\n", version);
 }
 
-void Display::SwapBuffers()
+void Display::Update()
 {
 	// facem swap la buffere (Double buffer)
 	glfwSwapBuffers(m_window);
+
+	glfwPollEvents();
+
+	if (GLFW_PRESS == glfwGetKey(m_window, GLFW_KEY_ESCAPE)) {
+		glfwSetWindowShouldClose(m_window, 1);
+	}
 }
 
 void Display::Clear()
 {
 	// stergem ce s-a desenat anterior
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+bool Display::IsRunning()
+{
+	return !glfwWindowShouldClose(m_window);
 }
 
 Display::~Display()

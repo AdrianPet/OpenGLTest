@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <GL/glew.h>
+#include "Transform.h"
 
 class Shader
 {
@@ -8,6 +9,7 @@ public:
 	Shader(const std::string& fileName);
 
 	void Bind();
+	void Update(const Transform& transform);
 
 	virtual ~Shader();
 protected:

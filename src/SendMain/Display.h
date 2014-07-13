@@ -13,10 +13,11 @@ public:
 	void Update();
 	bool IsRunning();
 
+	GLFWwindow* window;
+
 	virtual ~Display();
 protected:
 private:
 
-	GLFWwindow* m_window;
 };
 

@@ -18,7 +18,7 @@ Shader::Shader(const std::string& fileName)
 	glValidateProgram(m_program);
 	CheckShaderError(m_program, GL_LINK_STATUS, true, "Invalid shader program");
 
-	m_uniforms[0] = glGetUniformLocation(m_program, "MVP");
+	m_uniforms[0] = glGetUniformLocation(m_program, "transform");
 	m_uniforms[1] = glGetUniformLocation(m_program, "Normal");
 	m_uniforms[2] = glGetUniformLocation(m_program, "lightDirection");
 }
@@ -37,6 +37,12 @@ Shader::~Shader()
 void Shader::Bind()
 {
 	glUseProgram(m_program);
+}
+
+void Shader::Update(const Transform& transform)
+{
+	glm::mat4 model = transform.GetModel();
+	glUniformMatrix4fv(m_uniforms[0], 1, GL_FALSE, &model[0][0]);
 }
 
 std::string Shader::LoadShader(const std::string& fileName)

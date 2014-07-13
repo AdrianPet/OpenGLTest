@@ -8,7 +8,7 @@
 class Player
 {
 public:
-	Player(Display* d, Shader* sh, float dim, std::string file);
+	Player(Display* d, Shader* sh, std::string file);
 	void Draw();
 	void Update();
 	virtual ~Player();

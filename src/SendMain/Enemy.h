@@ -17,6 +17,6 @@ private:
 	Shader* m_shader;
 	Transform* m_transform;
 	int m_type;
-
-	static const unsigned int NUM_TYPES = 2;
+	int m_asc;
+	float m_fps;
 };

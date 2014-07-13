@@ -72,6 +72,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SendMain.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sprite.h" />

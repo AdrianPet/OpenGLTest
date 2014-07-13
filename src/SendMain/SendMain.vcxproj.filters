@@ -60,6 +60,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Active</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Source Files\Active</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\Shader.fs.glsl">
@@ -95,6 +98,9 @@
       <Filter>Header Files\Active</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Active</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
       <Filter>Header Files\Active</Filter>
     </ClInclude>
   </ItemGroup>

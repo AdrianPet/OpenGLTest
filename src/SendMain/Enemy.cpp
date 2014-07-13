@@ -1,6 +1,5 @@
 #include "Enemy.h"
 #include <stdlib.h>
-#include <time.h>
 
 Enemy::Enemy(Shader* s, float dim, int t)
 {
@@ -13,15 +12,24 @@ Enemy::Enemy(Shader* s, float dim, int t)
 	};
 
 	std::string file;
-	//srand(time(NULL));
-	//m_type = rand() % NUM_TYPES;
 	m_type = t;
 	file = m_type == 0 ? std::string("../data/Textures/Enemy1.png") : std::string("../data/Textures/Enemy2.png");
-
+	
 	m_sprite = new Sprite(verts, sizeof(verts) / sizeof(verts[0]), file.c_str());
+
+	m_asc = 1;
+	m_fps = 0.0f;
 
 	m_shader = s;
 	m_transform = new Transform;
+
+	float x, y, z;
+	x = (rand() % 100 - 50) / 50.0f;
+	y = (rand() % 100 - 20) / 100.0f;
+	z = 0;
+
+	m_transform->SetPos(glm::vec3(x, y, z));
+	m_shader->Update(*m_transform);
 }
 
 void Enemy::Draw()
@@ -40,13 +48,13 @@ void Enemy::Update()
 
 	if (m_type == 1)
 	{
-		static float fps = 0.0f;
-		y += sinf(fps) / 200;
-		fps += speed;
+		if (y + sinf(m_fps) / 200 < limit)
+			y += sinf(m_fps) / 200;
+
+		m_fps += speed;
 	}
 
-	static int asc = 1;
-	x += asc * speed;
+	x += m_asc * speed;
 	if (fabs(x) < limit)
 	{
 		m_transform->SetPos(glm::vec3(x, y, z));
@@ -54,7 +62,7 @@ void Enemy::Update()
 	else
 	{
 		m_transform->SetPos(glm::vec3(x < 0 ? -limit : limit, y, z));
-		asc *= -1;
+		m_asc *= -1;
 	}
 
 	m_shader->Update(*m_transform);

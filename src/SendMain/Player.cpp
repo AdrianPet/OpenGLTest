@@ -1,7 +1,8 @@
 #include "Player.h"
 
-Player::Player(Display* d, Shader* sh, float dim, std::string file)
+Player::Player(Display* d, Shader* sh, std::string file)
 {
+	float dim = 0.25f;
 	float hd = dim / 2.0f;
 	Vertex verts[] = {
 		Vertex(glm::vec3(hd, hd, 0), glm::vec2(1, 1)),

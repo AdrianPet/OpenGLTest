@@ -74,6 +74,8 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="SendMain.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -90,6 +92,8 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "Display.h"
 #include "Shader.h"
-#include "SpriteManager.h"
 #include "Player.h"
 #include "Background.h"
 #include "EnemyManager.h"
@@ -23,8 +22,8 @@ int main()
 		DONE:
 				-clasa Enemy cu Sprite + miscare
 				-generare automata mai multe clase de inamici initial
-		TODO:
 				-Proiectil pe Space. Miscare proiectil.
+		TODO:
 				-Rotatie pe Z(?)
 				-Matrice ortografica si pentru camera
 				-coliziuni de toate
@@ -37,7 +36,7 @@ int main()
 	Shader* shader = new Shader("../data/Shader");
 	Player* player = new Player(display, shader, "../data/Textures/player.png");
 	Background* background = new Background(shader, "../data/Textures/Background.png");
-	EnemyManager* enemyManager = new EnemyManager(shader, 20);
+	EnemyManager* enemyManager = new EnemyManager(shader, 4);
 
 	while (display->IsRunning()) {
 
@@ -51,7 +50,7 @@ int main()
 
 		player->Update();
 		player->Draw();
-		
+
 		display->Update();
 	}
 

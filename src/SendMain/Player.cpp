@@ -15,11 +15,14 @@ Player::Player(Display* d, Shader* sh, std::string file)
 	m_display = d;
 	m_shader = sh;
 	m_transform = new Transform;
+
+	m_projectileManager = new ProjectileManager(m_shader, m_transform);
 }
 
 void Player::Draw()
 {
 	m_sprite->Draw();
+	m_projectileManager->UpdateDraw();
 }
 
 void Player::Update()
@@ -47,6 +50,11 @@ void Player::Update()
 	{
 		x += speed;
 	}
+	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_SPACE))
+	{
+		Fire();
+	}
+
 	const float ylimit = 0.9f;
 	const float xlimit = 0.9f;
 	if (fabs(y) < ylimit && fabs(x) < xlimit)
@@ -75,8 +83,14 @@ void Player::Update()
 	m_shader->Update(*m_transform);
 }
 
+void Player::Fire()
+{
+	m_projectileManager->add(m_transform);
+}
+
 Player::~Player()
 {
 	delete m_sprite;
 	delete m_transform;
+	delete m_projectileManager;
 }

@@ -63,6 +63,12 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>Source Files\Active</Filter>
     </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\Active</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileManager.cpp">
+      <Filter>Source Files\Active</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\Shader.fs.glsl">
@@ -101,6 +107,12 @@
       <Filter>Header Files\Active</Filter>
     </ClInclude>
     <ClInclude Include="EnemyManager.h">
+      <Filter>Header Files\Active</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\Active</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileManager.h">
       <Filter>Header Files\Active</Filter>
     </ClInclude>
   </ItemGroup>

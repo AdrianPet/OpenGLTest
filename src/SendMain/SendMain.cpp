@@ -34,9 +34,10 @@ int main()
 
 	Display* display = new Display(800, 600, "Joc");
 	Shader* shader = new Shader("../data/Shader");
-	Player* player = new Player(display, shader, "../data/Textures/player.png");
-	Background* background = new Background(shader, "../data/Textures/Background.png");
 	EnemyManager* enemyManager = new EnemyManager(shader, 4);
+	Player* player = new Player(display, shader, "../data/Textures/player.png", enemyManager);
+	Background* background = new Background(shader, "../data/Textures/Background.png");
+	
 
 	while (display->IsRunning()) {
 

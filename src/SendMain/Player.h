@@ -5,11 +5,12 @@
 #include "Transform.h"
 #include "Shader.h"
 #include "ProjectileManager.h"
+#include "EnemyManager.h"
 
 class Player
 {
 public:
-	Player(Display* d, Shader* sh, std::string file);
+	Player(Display* d, Shader* sh, std::string file, EnemyManager* em);
 	void Draw();
 	void Update();
 	void Fire();

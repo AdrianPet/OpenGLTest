@@ -12,6 +12,8 @@ public:
 	void Draw();
 
 	virtual ~Enemy();
+
+	float xm, xM, ym, yM;
 private:
 	Sprite* m_sprite;
 	Shader* m_shader;
@@ -19,4 +21,5 @@ private:
 	int m_type;
 	int m_asc;
 	float m_fps;
+	float hd;
 };

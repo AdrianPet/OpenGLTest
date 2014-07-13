@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Display* d, Shader* sh, std::string file)
+Player::Player(Display* d, Shader* sh, std::string file, EnemyManager* em)
 {
 	float dim = 0.25f;
 	float hd = dim / 2.0f;
@@ -16,17 +16,18 @@ Player::Player(Display* d, Shader* sh, std::string file)
 	m_shader = sh;
 	m_transform = new Transform;
 
-	m_projectileManager = new ProjectileManager(m_shader, m_transform);
+	m_projectileManager = new ProjectileManager(m_shader, m_transform, em);
 }
 
 void Player::Draw()
 {
 	m_sprite->Draw();
-	m_projectileManager->UpdateDraw();
 }
 
 void Player::Update()
 {
+	m_projectileManager->UpdateDraw();
+
 	const float speed = 0.01f;
 
 	float x, y, z;

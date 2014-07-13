@@ -3,7 +3,8 @@
 
 Enemy::Enemy(Shader* s, float dim, int t)
 {
-	float hd = dim / 2.0f;
+	hd = dim / 2.0f;
+
 	Vertex verts[] = {
 		Vertex(glm::vec3(hd, hd, 0), glm::vec2(1, 1)),
 		Vertex(glm::vec3(hd, -hd, 0), glm::vec2(1, 0)),
@@ -39,7 +40,7 @@ void Enemy::Draw()
 
 void Enemy::Update()
 {
-	float speed = 0.015f;
+	float speed = 0.0f;
 	float limit = 0.85f;
 	float x, y, z;
 	x = m_transform->GetPos()->x;
@@ -49,12 +50,15 @@ void Enemy::Update()
 	if (m_type == 1)
 	{
 		if (y + sinf(m_fps) / 200 < limit)
-			y += sinf(m_fps) / 200;
-
+		{
+			float inc = sinf(m_fps) / 200;
+			y += inc;
+		}
 		m_fps += speed;
 	}
 
 	x += m_asc * speed;
+
 	if (fabs(x) < limit)
 	{
 		m_transform->SetPos(glm::vec3(x, y, z));
@@ -64,6 +68,11 @@ void Enemy::Update()
 		m_transform->SetPos(glm::vec3(x < 0 ? -limit : limit, y, z));
 		m_asc *= -1;
 	}
+
+	xm = m_transform->GetPos()->x - hd;
+	xM = m_transform->GetPos()->x + hd;
+	ym = m_transform->GetPos()->y - hd;
+	yM = m_transform->GetPos()->y + hd;
 
 	m_shader->Update(*m_transform);
 }

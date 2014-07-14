@@ -32,10 +32,8 @@ void Projectile::Update()
 
 	m_transform.SetPos(glm::vec3(x, y + speed, z));
 	
-	// nu ar trebui sa fie /8 dupa algoritm, 
-	// dar pare ca arata mai realist asa
-	ym = m_transform.GetPos()->y - hd / 8;
-	yM = m_transform.GetPos()->y + hd / 8;
+	ym = m_transform.GetPos()->y - hd;
+	yM = m_transform.GetPos()->y + hd;
 	
 	m_shader->Update(m_transform);
 	if (y > 1)

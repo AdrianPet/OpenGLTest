@@ -40,7 +40,7 @@ void Enemy::Draw()
 
 void Enemy::Update()
 {
-	float speed = 0.0f;
+	float speed = 0.01f;
 	float limit = 0.85f;
 	float x, y, z;
 	x = m_transform->GetPos()->x;
@@ -69,10 +69,11 @@ void Enemy::Update()
 		m_asc *= -1;
 	}
 
-	xm = m_transform->GetPos()->x - hd;
-	xM = m_transform->GetPos()->x + hd;
-	ym = m_transform->GetPos()->y - hd;
-	yM = m_transform->GetPos()->y + hd;
+	///2 nu face parte din algoritm, dar arata mai realist asa
+	xm = m_transform->GetPos()->x - hd / 2;
+	xM = m_transform->GetPos()->x + hd / 2;
+	ym = m_transform->GetPos()->y - hd / 2;
+	yM = m_transform->GetPos()->y + hd / 2;
 
 	m_shader->Update(*m_transform);
 }

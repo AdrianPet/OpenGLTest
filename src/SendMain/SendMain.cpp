@@ -5,6 +5,8 @@
 #include "Background.h"
 #include "EnemyManager.h"
 
+#define NUM_ENEMIES 3
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -20,34 +22,41 @@ int main()
 {
 	/*
 		DONE:
-				-clasa Enemy cu Sprite + miscare
-				-generare automata mai multe clase de inamici initial
-				-Proiectil pe Space. Miscare proiectil.
+				-rotatie pe Z
 		TODO:
-				-Rotatie pe Z(?)
-				-Matrice ortografica si pentru camera
 				-coliziuni de toate
-				-Damage HP + kill adversari
+				-animatie nava
+				-scor
+				-miscare mai realista
+				-proiectile adversari
+				-health bar (player + enemies)
+				-(optional):- meniu
+							- respawn adversari
+							- parallax
+							- upgraded sound and BGM
+							- matrice ortografica si pentru camera
+							- power-ups
+							- AI avansat
 		BUG:
 				-Not yet
 	*/
 
 	Display* display = new Display(800, 600, "Joc");
 	Shader* shader = new Shader("../data/Shader");
-	EnemyManager* enemyManager = new EnemyManager(shader, 4);
+	EnemyManager* enemyManager = new EnemyManager(shader, NUM_ENEMIES);
 	Player* player = new Player(display, shader, "../data/Textures/player.png", enemyManager);
 	Background* background = new Background(shader, "../data/Textures/Background.png");
-	
 
-	while (display->IsRunning()) {
-
+	while (display->IsRunning())
+	{
 		display->Clear();
 		shader->Bind();
 
 		background->Update();
 		background->Draw();
 
-		enemyManager->UpdateDraw();
+		enemyManager->Update();
+		enemyManager->Draw();
 
 		player->Update();
 		player->Draw();
@@ -64,3 +73,4 @@ int main()
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
+

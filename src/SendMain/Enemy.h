@@ -14,6 +14,7 @@ public:
 	virtual ~Enemy();
 
 	float xm, xM, ym, yM;
+	int hp;
 private:
 	Sprite* m_sprite;
 	Shader* m_shader;

@@ -1,7 +1,7 @@
 #include "Projectile.h"
 
 
-Projectile::Projectile(Shader* sh, Transform t)
+Projectile::Projectile(Shader* sh, Transform t, glm::vec3 forward)
 {
 	float dim = 0.1f;
 	hd = dim / 2.0f;
@@ -15,6 +15,7 @@ Projectile::Projectile(Shader* sh, Transform t)
 	m_shader = sh;
 	m_sprite = new Sprite(verts, sizeof(verts) / sizeof(verts[0]), "../data/Textures/projectile.png");
 	m_transform = t;
+	m_forward = forward;
 	m_good = true;
 
 	xm = m_transform.GetPos()->x - hd;
@@ -26,17 +27,19 @@ Projectile::Projectile(Shader* sh, Transform t)
 void Projectile::Update()
 {
 	float x, y, z,speed = 0.01f;
+	
+	m_transform.SetPos(speed * m_forward + (*(m_transform.GetPos())));
+	
 	x = m_transform.GetPos()->x;
 	y = m_transform.GetPos()->y;
 	z = m_transform.GetPos()->z;
 
-	m_transform.SetPos(glm::vec3(x, y + speed, z));
-	
-	ym = m_transform.GetPos()->y - hd;
-	yM = m_transform.GetPos()->y + hd;
-	
-	m_shader->Update(m_transform);
-	if (y > 1)
+	xm = x - hd;
+	xM = x + hd;
+	ym = y - hd;
+	yM = y + hd;
+
+	if (y > 1 || y < -1 || x > 1 || x < -1)
 	{
 		m_good = false;
 	}
@@ -44,6 +47,7 @@ void Projectile::Update()
 
 void Projectile::Draw()
 {
+	m_shader->Update(m_transform);
 	m_sprite->Draw();
 }
 

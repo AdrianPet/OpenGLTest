@@ -31,10 +31,12 @@ Enemy::Enemy(Shader* s, float dim, int t)
 
 	m_transform->SetPos(glm::vec3(x, y, z));
 	m_shader->Update(*m_transform);
+	hp = 100;
 }
 
 void Enemy::Draw()
 {
+	m_shader->Update(*m_transform);
 	m_sprite->Draw();
 }
 
@@ -74,8 +76,6 @@ void Enemy::Update()
 	xM = m_transform->GetPos()->x + hd / 2;
 	ym = m_transform->GetPos()->y - hd / 2;
 	yM = m_transform->GetPos()->y + hd / 2;
-
-	m_shader->Update(*m_transform);
 }
 
 Enemy::~Enemy()

@@ -8,7 +8,8 @@ class EnemyManager
 {
 public:
 	EnemyManager(Shader* sh, int number);
-	void UpdateDraw();
+	void Update();
+	void Draw();
 	~EnemyManager();
 
 	std::vector<Enemy*> *m_enemies;

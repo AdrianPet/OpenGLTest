@@ -2,13 +2,14 @@
 #include <windows.h>
 #include <mmsystem.h>
 
-ProjectileManager::ProjectileManager(Shader* sh, Transform* t, EnemyManager* em)
+ProjectileManager::ProjectileManager(Shader* sh, glm::vec3* forward, EnemyManager* em)
 {
 	m_enemyManager = em;
 	m_projectiles = new std::vector<Projectile*>;
 	m_projectiles->reserve(MAX_NUM_PROJECTILES);
 	m_shader = sh;
 	m_time = clock();
+	m_forward = forward;
 }
 
 void ProjectileManager::add(Transform* t)
@@ -16,7 +17,7 @@ void ProjectileManager::add(Transform* t)
 	const int PERIOD = 270;
 	if (clock() - m_time > PERIOD)
 	{
-		m_projectiles->push_back(new Projectile(m_shader, *t));
+		m_projectiles->push_back(new Projectile(m_shader, *t, *m_forward));
 		m_time = clock();
 		PlaySound("../data/Sounds/shot.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
@@ -34,7 +35,7 @@ void ProjectileManager::remove(Projectile* p)
 	delete p;
 }
 
-void ProjectileManager::UpdateDraw()
+void ProjectileManager::Update()
 {
 	
 	for (int i = 0; i < m_projectiles->size(); i++)
@@ -55,6 +56,7 @@ void ProjectileManager::UpdateDraw()
 				{
 					PlaySound("../data/Sounds/boom.wav", NULL, SND_ASYNC | SND_FILENAME);
 					remove(p);
+					e->hp -= 40;
 					return;
 				}
 			}
@@ -64,12 +66,20 @@ void ProjectileManager::UpdateDraw()
 		if (p->isValid())
 		{
 			p->Update();
-			p->Draw();
 		}
 		else
 		{
 			remove(p);
 		}
+	}
+}
+
+void ProjectileManager::Draw()
+{
+	for (int i = 0; i < m_projectiles->size(); i++)
+	{
+		Projectile* p = m_projectiles->at(i);
+		p->Draw();
 	}
 }
 

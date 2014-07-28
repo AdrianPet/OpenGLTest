@@ -19,6 +19,7 @@ private:
 	Sprite* m_sprite;
 	Display* m_display;
 	Transform* m_transform;
+	glm::vec3 m_forward;
 	Shader* m_shader;
 	ProjectileManager* m_projectileManager;
 };

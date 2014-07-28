@@ -69,6 +69,9 @@
     <ClCompile Include="ProjectileManager.cpp">
       <Filter>Source Files\Active</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files\Passive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\Shader.fs.glsl">
@@ -77,6 +80,7 @@
     <None Include="..\data\Shader.vs.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SpriteManager.h">
@@ -89,9 +93,6 @@
       <Filter>Header Files\Passive</Filter>
     </ClInclude>
     <ClInclude Include="Sprite.h">
-      <Filter>Header Files\Passive</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
       <Filter>Header Files\Passive</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -114,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="ProjectileManager.h">
       <Filter>Header Files\Active</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Header Files\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Passive</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@
 class Projectile
 {
 public:
-	Projectile(Shader* sh, Transform t);
+	Projectile(Shader* sh, Transform t, glm::vec3 forward);
 	void Update();
 	void Draw();
 	bool isValid();
@@ -19,5 +19,6 @@ private:
 	Transform m_transform;
 	bool m_good;
 	float hd;
+	glm::vec3 m_forward;
 };
 

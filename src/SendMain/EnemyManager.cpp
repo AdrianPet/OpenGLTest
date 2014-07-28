@@ -13,12 +13,27 @@ EnemyManager::EnemyManager(Shader* sh, int number)
 		m_enemies->push_back(new Enemy(sh, enemySize, rand() % NUM_TYPES));
 }
 
-void EnemyManager::UpdateDraw()
+void EnemyManager::Update()
 {
 	for (int i = 0; i < m_enemies->size(); i++)
 	{
 		Enemy* e = m_enemies->at(i);
+		if (e->hp < 0)
+		{
+			delete e;
+			m_enemies->erase(m_enemies->begin() + i);
+			i--;
+			continue;
+		}
 		e->Update();
+	}
+}
+
+void EnemyManager::Draw()
+{
+	for (int i = 0; i < m_enemies->size(); i++)
+	{
+		Enemy* e = m_enemies->at(i);
 		e->Draw();
 	}
 }

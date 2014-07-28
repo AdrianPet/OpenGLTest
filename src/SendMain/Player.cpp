@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player(Display* d, Shader* sh, std::string file, EnemyManager* em)
 {
@@ -16,46 +17,74 @@ Player::Player(Display* d, Shader* sh, std::string file, EnemyManager* em)
 	m_shader = sh;
 	m_transform = new Transform;
 
-	m_projectileManager = new ProjectileManager(m_shader, m_transform, em);
+	m_projectileManager = new ProjectileManager(m_shader, &m_forward, em);
 }
 
 void Player::Draw()
 {
+	m_shader->Update(*m_transform);
 	m_sprite->Draw();
+	m_projectileManager->Draw();
 }
 
 void Player::Update()
 {
-	m_projectileManager->UpdateDraw();
+	m_projectileManager->Update();
 
 	const float speed = 0.01f;
+	const float uspeed = 5.0f;
 
-	float x, y, z;
-	x = m_transform->GetPos()->x;
-	y = m_transform->GetPos()->y;
-	z = m_transform->GetPos()->z;
+	float yaw, pitch, roll;
+	yaw = m_transform->GetRot()->y;
+	pitch = m_transform->GetRot()->x;
+	roll = m_transform->GetRot()->z;
 
-	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_W))
-	{
-		y += speed;
-	}
-	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_S))
-	{
-		y -= speed;
-	}
 	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_A))
 	{
-		x -= speed;
+		m_transform->SetRot(glm::vec3(pitch, yaw, roll + uspeed));
 	}
 	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_D))
 	{
-		x += speed;
+		m_transform->SetRot(glm::vec3(pitch, yaw, roll - uspeed));
+	}
+
+	glm::vec3 f = *(m_transform->GetRot());
+	double PI = atan(1) * 4;
+	double fz = f.z * PI / 180;
+	double c = cos(fz);
+	double s = -sin(fz);
+
+	//degeaba fac normalizarea, matematic, ca sin^2 + cos^2 = 1 oricum
+	//dar mai sigur asa
+	m_forward = glm::normalize(glm::vec3(s, c, 0));
+	glm::vec3 up(0, 0, 1);
+	glm::vec3 right = glm::cross(m_forward, up);
+
+	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_W))
+	{
+		m_transform->SetPos(speed * m_forward + (*(m_transform->GetPos())));
+	}
+	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_S))
+	{
+		m_transform->SetPos(-speed * m_forward + (*(m_transform->GetPos())));
+	}
+	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_Q))
+	{
+		m_transform->SetPos(-speed * right + (*(m_transform->GetPos())));
+	}
+	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_E))
+	{
+		m_transform->SetPos(speed * right + (*(m_transform->GetPos())));
 	}
 	if (GLFW_PRESS == glfwGetKey(m_display->window, GLFW_KEY_SPACE))
 	{
 		Fire();
 	}
 
+	float x, y, z;
+	x = m_transform->GetPos()->x;
+	y = m_transform->GetPos()->y;
+	z = m_transform->GetPos()->z;
 	const float ylimit = 0.9f;
 	const float xlimit = 0.9f;
 	if (fabs(y) < ylimit && fabs(x) < xlimit)
@@ -80,8 +109,6 @@ void Player::Update()
 			}
 		}
 	}
-
-	m_shader->Update(*m_transform);
 }
 
 void Player::Fire()

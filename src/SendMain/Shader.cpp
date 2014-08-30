@@ -42,6 +42,7 @@ void Shader::Bind()
 void Shader::Update(const Transform& transform)
 {
 	glm::mat4 model = transform.GetModel();
+	glUniform1f(glGetUniformLocation(m_program, "hp"), php);
 	glUniformMatrix4fv(m_uniforms[0], 1, GL_FALSE, &model[0][0]);
 }
 

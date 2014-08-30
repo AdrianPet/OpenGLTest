@@ -37,7 +37,12 @@ void ProjectileManager::remove(Projectile* p)
 
 void ProjectileManager::Update()
 {
-	
+	if (m_enemyManager->m_enemies->size() == 0)
+	{
+		PlaySound("../data/Sounds/win.wav", NULL, SND_SYNC | SND_FILENAME);
+		exit(0);
+	}
+
 	for (int i = 0; i < m_projectiles->size(); i++)
 	{
 		Projectile* p = m_projectiles->at(i);
@@ -56,7 +61,7 @@ void ProjectileManager::Update()
 				{
 					PlaySound("../data/Sounds/boom.wav", NULL, SND_ASYNC | SND_FILENAME);
 					remove(p);
-					e->hp -= 40;
+					e->TakeDamage();
 					return;
 				}
 			}

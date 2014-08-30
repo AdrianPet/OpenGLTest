@@ -10,6 +10,7 @@ public:
 	Enemy(Shader* s, float dim, int t);
 	void Update();
 	void Draw();
+	void TakeDamage();
 
 	virtual ~Enemy();
 
@@ -22,5 +23,6 @@ private:
 	int m_type;
 	int m_asc;
 	float m_fps;
+	std::string m_file;
 	float hd;
 };

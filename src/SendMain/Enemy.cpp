@@ -12,11 +12,11 @@ Enemy::Enemy(Shader* s, float dim, int t)
 		Vertex(glm::vec3(-hd, hd, 0), glm::vec2(0, 1))
 	};
 
-	std::string file;
-	m_type = t;
-	file = m_type == 0 ? std::string("../data/Textures/Enemy1.png") : std::string("../data/Textures/Enemy2.png");
 	
-	m_sprite = new Sprite(verts, sizeof(verts) / sizeof(verts[0]), file.c_str());
+	m_type = t;
+	m_file = m_type == 0 ? std::string("../data/Textures/Enemy1.png") : std::string("../data/Textures/Enemy2.png");
+	
+	m_sprite = new Sprite(verts, sizeof(verts) / sizeof(verts[0]), m_file.c_str());
 
 	m_asc = 1;
 	m_fps = 0.0f;
@@ -76,6 +76,28 @@ void Enemy::Update()
 	xM = m_transform->GetPos()->x + hd / 2;
 	ym = m_transform->GetPos()->y - hd / 2;
 	yM = m_transform->GetPos()->y + hd / 2;
+}
+
+void Enemy::TakeDamage()
+{
+	hp -= 40;
+	if (m_file == std::string("../data/Textures/Enemy1.png"))
+		m_file = std::string("../data/Textures/Enemy1d1.png");
+	else if (m_file == std::string("../data/Textures/Enemy1d1.png"))
+		m_file = std::string("../data/Textures/Enemy1d2.png");
+	else if (m_file == std::string("../data/Textures/Enemy2.png"))
+		m_file = std::string("../data/Textures/Enemy2d1.png");
+	else if (m_file == std::string("../data/Textures/Enemy2d1.png"))
+		m_file = std::string("../data/Textures/Enemy2d2.png");
+
+	Vertex verts[] = {
+		Vertex(glm::vec3(hd, hd, 0), glm::vec2(1, 1)),
+		Vertex(glm::vec3(hd, -hd, 0), glm::vec2(1, 0)),
+		Vertex(glm::vec3(-hd, -hd, 0), glm::vec2(0, 0)),
+		Vertex(glm::vec3(-hd, hd, 0), glm::vec2(0, 1))
+	};
+
+	m_sprite = new Sprite(verts, sizeof(verts) / sizeof(verts[0]), m_file.c_str());
 }
 
 Enemy::~Enemy()

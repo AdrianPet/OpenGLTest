@@ -11,6 +11,7 @@ public:
 	void Bind();
 	void Update(const Transform& transform);
 
+	float php;
 	virtual ~Shader();
 protected:
 private:

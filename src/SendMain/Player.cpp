@@ -1,10 +1,14 @@
 #include "Player.h"
 #include <iostream>
+#include <windows.h>
+#include <mmsystem.h>
+
+#define MAX_HP 10000
 
 Player::Player(Display* d, Shader* sh, std::string file, EnemyManager* em)
 {
 	float dim = 0.25f;
-	float hd = dim / 2.0f;
+	hd = dim / 2.0f;
 	Vertex verts[] = {
 		Vertex(glm::vec3(hd, hd, 0), glm::vec2(1, 1)),
 		Vertex(glm::vec3(hd, -hd, 0), glm::vec2(1, 0)),
@@ -15,9 +19,12 @@ Player::Player(Display* d, Shader* sh, std::string file, EnemyManager* em)
 	m_sprite = new Sprite(verts, sizeof(verts) / sizeof(verts[0]), file.c_str());
 	m_display = d;
 	m_shader = sh;
-	m_transform = new Transform;
+	m_transform = new Transform(glm::vec3(0, -.5, 0));
 
 	m_projectileManager = new ProjectileManager(m_shader, &m_forward, em);
+	m_enemyManager = em;
+
+	hp = MAX_HP;
 }
 
 void Player::Draw()
@@ -29,6 +36,24 @@ void Player::Draw()
 
 void Player::Update()
 {
+	if (hp < 0)
+	{
+		PlaySound("../data/Sounds/GameOver.wav", NULL, SND_SYNC | SND_FILENAME);
+		exit(0);
+	}
+
+	if (hp < MAX_HP)
+	{
+		hp += MAX_HP / 900;
+		std::cout << hp << std::endl;
+	}
+
+	if (hp < MAX_HP / 3)
+	{
+		PlaySound("../data/Sounds/alarm.wav", NULL, SND_ASYNC | SND_FILENAME);
+	}
+
+	m_shader->php = hp;
 	m_projectileManager->Update();
 
 	const float speed = 0.01f;
@@ -107,6 +132,33 @@ void Player::Update()
 			{
 				m_transform->SetPos(glm::vec3(x < 0 ? -xlimit : xlimit, y, z));
 			}
+		}
+	}
+
+
+	x = m_transform->GetPos()->x;
+	y = m_transform->GetPos()->y;
+	z = m_transform->GetPos()->z;
+
+	float xm = x - hd;
+	float xM = x + hd;
+	float ym = y - hd;
+	float yM = y + hd;
+
+	int L = m_enemyManager->m_enemies->size();
+
+	for (int j = 0; j < L; j++)
+	{
+		Enemy* e = m_enemyManager->m_enemies->at(j);
+		//verifica daca se intersecteaza
+		
+		if (e->xm < xM && e->xM > xm &&
+			e->ym < yM && e->yM > ym)
+		{
+			PlaySound("../data/Sounds/boom2.wav", NULL, SND_ASYNC | SND_FILENAME);
+			e->TakeDamage();
+			hp -= 2000;
+			return;
 		}
 	}
 }

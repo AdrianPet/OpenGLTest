@@ -5,7 +5,7 @@
 #include "Background.h"
 #include "EnemyManager.h"
 
-#define NUM_ENEMIES 3
+#define NUM_ENEMIES 13
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -23,14 +23,16 @@ int main()
 	/*
 		DONE:
 				-rotatie pe Z
-		TODO:
+				-(un fel de) health bar enemies
 				-coliziuni de toate
+				-health bar player
+		TODO:
 				-animatie nava
 				-scor
 				-miscare mai realista
 				-proiectile adversari
-				-health bar (player + enemies)
-				-(optional):- meniu
+				-(optional):
+							- meniu
 							- respawn adversari
 							- parallax
 							- upgraded sound and BGM
